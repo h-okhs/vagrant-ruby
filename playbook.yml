@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: change download site
+      replace:
+        path: /etc/apt/sources.list
+        regexp: 'http://archive.ubuntu.com/ubuntu'
+        replace: 'http://ftp.jaist.ac.jp/pub/Linux/ubuntu/'
+        backup: yes
+    - name: install some packages
+      apt:
+        name:
+          - aptitude
+          - language-pack-ja
+        update_cache: yes
+    - name: Update all packages to the latest version
+      apt:
+        upgrade: dist
+    - name: Upgrade all packages to the latest version
+      apt:
+        name: "*"
+        state: latest
+  roles:
+  - zzet.rbenv
